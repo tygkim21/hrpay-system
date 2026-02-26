@@ -1,6 +1,6 @@
 # 작업 진척 트래커
 
-## 전체 진척률: ✅✅✅✅✅✅✅⬜ 87% (Phase 0~6 완료 / Phase 7 대기)
+## 전체 진척률: ✅✅✅✅✅✅✅🔄 95% (Phase 0~6 완료 / Phase 7 진행중)
 
 **테스트 현황**: 89개 전체 통과 (accounts 9 / employees 31 / attendance 22 / payroll 27)
 **최종 업데이트**: 2026-02-26
@@ -75,13 +75,30 @@
 - [x] A4 가로 PDF 출력 (pageStyle CSS)
 - [x] 테스트 8개
 
-## Phase 7. 품질검사/배포 ⬜ 대기
-- [ ] 프론트엔드 통합 테스트
-- [ ] 보안 점검 (SECRET_KEY, DEBUG=False, HTTPS, ALLOWED_HOSTS)
-- [ ] 운영 환경 설정 (gunicorn + nginx 또는 클라우드)
-- [ ] 정적 파일 서빙 (`collectstatic`)
-- [ ] 데이터 백업 정책
-- [ ] 운영 배포
+## Phase 7. 품질검사/배포 🔄 진행중
+
+### 완료
+- [x] `waitress` 설치 (Windows WSGI 서버, v3.0.2)
+- [x] `whitenoise` 설치 (정적 파일 서빙, v6.11.0)
+- [x] `requirements.txt` 갱신
+- [x] `settings.py` 운영 설정 추가 (STATIC_ROOT, whitenoise 미들웨어, CORS env화)
+- [x] `frontend/src/api/axiosInstance.js` API URL 환경변수화 (`REACT_APP_API_URL`)
+- [x] `frontend/.env.development` 생성 (개발 기본값)
+- [x] `frontend/.env.production.example` 생성 (운영 템플릿)
+- [x] `scripts/start_backend.bat` (waitress 기동)
+- [x] `scripts/build_frontend.bat` (React 빌드)
+- [x] `scripts/start_frontend.bat` (serve 기동)
+- [x] `scripts/start_all.bat` (전체 원클릭 기동)
+- [x] `.env.example` CORS_ALLOWED_ORIGINS 항목 추가
+- [x] 전체 테스트 89개 회귀 통과
+
+### 잔여 (운영 서버에서 직접 수행)
+- [ ] `.env.production` 생성 (서버 IP 입력)
+- [ ] `.env` 운영값 설정 (DEBUG=False, 강력한 SECRET_KEY, ALLOWED_HOSTS)
+- [ ] `python manage.py collectstatic` 실행
+- [ ] `npm run build` 실행 (frontend)
+- [ ] 방화벽 포트 개방 (8000, 3000)
+- [ ] 서버 재시작 시 자동 기동 설정 (Windows 작업 스케줄러 또는 NSSM)
 
 ---
 

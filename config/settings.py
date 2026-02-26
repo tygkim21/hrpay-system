@@ -54,8 +54,9 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
-    'corsheaders.middleware.CorsMiddleware',   # 최상단 필수
+    'corsheaders.middleware.CorsMiddleware',              # 최상단 필수
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',          # 정적 파일 (운영)
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -128,10 +129,11 @@ SIMPLE_JWT = {
     'AUTH_HEADER_TYPES'     : ('Bearer',),
 }
 
-# ── CORS 설정 (React 개발서버 허용) ───────────────────
+# ── CORS 설정 ─────────────────────────────────────────
+# 개발: localhost:3000  |  운영: .env의 CORS_ALLOWED_ORIGINS에 추가
+_cors_default = 'http://localhost:3000,http://127.0.0.1:3000'
 CORS_ALLOWED_ORIGINS = [
-    'http://localhost:3000',
-    'http://127.0.0.1:3000',
+    o.strip() for o in os.getenv('CORS_ALLOWED_ORIGINS', _cors_default).split(',') if o.strip()
 ]
 CORS_ALLOW_CREDENTIALS = True
 
@@ -170,8 +172,11 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
-#STATIC_URL = 'static/'
-STATIC_URL    = '/static/'
+STATIC_URL  = '/static/'
+STATIC_ROOT = BASE_DIR / 'staticfiles'          # collectstatic 수집 경로
+
+# whitenoise: 정적 파일 압축 + 해시 캐싱 (운영 환경)
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
